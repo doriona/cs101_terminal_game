@@ -43,15 +43,23 @@ def get_mine_counts(board, board_width, board_height):
                                 board2[current] += 1
     return board2
 
-def init_visible(visible, board_width, board_height):
+def init_visible(board, visible, board_width, board_height):
     i = 0
     while (i < board_width):
         j = 0
         while (j < board_height):
             pos = str(i) + ',' + str(j)
-            visible[pos] = 1
+            visible[pos] = 'N'
             j += 1
         i += 1
+    count = 1
+    while (count == 1):
+        i = random.randint(0, board_width - 1)
+        j = random.randint(0, board_height - 1)
+        pos = str(i) + ',' + str(j)
+        if (board.get(pos) != None) & (board[pos] != 'M'):
+            visible[pos] = 1
+            count = 0
     return visible
 
 def print_board(board, visible, board_width, board_height):
@@ -60,20 +68,24 @@ def print_board(board, visible, board_width, board_height):
         j = 0
         while (j < board_height):
             pos = str(i) + ',' + str(j)
-            if visible[pos] == 1:
+            if visible[pos] == 'Y':
                 if board.get(pos) != None:
                     print(board[pos], end = " ")
                 else:
                     print("0", end = " ")
+            elif visible[pos] == 'F':
+                print("F", end = " ")
+            else:
+                print("X", end = " ")
             j += 1
         print("\n", end = "")
         i += 1
 
 board = {}
 visible = {}
-visible = init_visible(visible, 5, 5)
 board = get_mine_positions(board, 5, 5, 5)
 board = get_mine_counts(board, 5, 5)
+visible = init_visible(board, visible, 5, 5)
 print("------------------------------------")
 print_board(board, visible, 5, 5)
 print("------------------------------------")
